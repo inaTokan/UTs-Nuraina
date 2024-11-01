@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Data Izin</title>
+    <link href="stylesizin.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+   
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Data Izin</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="izinForm">
+                    <div class="form-group">
+                        <label for="nama">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="nama" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="izin">Jenis Izin</label>
+                        <input type="text" class="form-control" id="izin" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" class="form-control" id="tanggal" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="jam">Jam</label>
+                        <input type="time" class="form-control" id="jam" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" id="keterangan" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tambah Izin</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Izin</th>
+                            <th>Tanggal</th>
+                            <th>Jam</th>
+                            <th>Keterangan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="izinTableBody">
+                        <!-- Data akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadIzinData);
+
+        document.getElementById('izinForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addIzin();
+        });
+
+        function loadIzinData() {
+            const izinData = JSON.parse(localStorage.getItem('izinData')) || [];
+            const tableBody = document.getElementById('izinTableBody');
+            tableBody.innerHTML = '';
+            izinData.forEach((izin, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${izin.nama}</td>
+                    <td>${izin.izin}</td>
+                    <td>${izin.tanggal}</td>
+                    <td>${izin.jam}</td>
+                    <td>${izin.keterangan}</td>
+                    <td>${izin.status || 'Pending'}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteIzin(${index})">Hapus</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addIzin() {
+            const nama = document.getElementById('nama').value;
+            const izin = document.getElementById('izin').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const jam = document.getElementById('jam').value;
+            const keterangan = document.getElementById('keterangan').value;
+
+            const izinData = JSON.parse(localStorage.getItem('izinData')) || [];
+            izinData.push({ nama: nama, izin: izin, tanggal: tanggal, jam: jam, keterangan: keterangan, status: 'Pending' });
+            localStorage.setItem('izinData', JSON.stringify(izinData));
+            loadIzinData();
+            document.getElementById('izinForm').reset();
+        }
+
+        function deleteIzin(index) {
+            const izinData = JSON.parse(localStorage.getItem('izinData'));
+            izinData.splice(index, 1);
+            localStorage.setItem('izinData', JSON.stringify(izinData));
+            loadIzinData();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Data Karyawan</title>
+    <link href="styleskaryawan.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+       
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mt-3">Data Karyawan</h1>
+        <div class="card mb-3">
+            <div class="card-body">
+                <form id="karyawanForm">
+                    <div class="form-group">
+                        <label for="kode">Kode</label>
+                        <input type="text" class="form-control" id="kode" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="nama">Nama</label>
+                        <input type="text" class="form-control" id="nama" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="alamat">Alamat</label>
+                        <textarea class="form-control" id="alamat" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="jabatan">Jabatan</label>
+                        <input type="text" class="form-control" id="jabatan" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tambah Karyawan</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Alamat</th>
+                            <th>Jabatan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="karyawanTableBody">
+                        <!-- Data akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadKaryawanData);
+
+        document.getElementById('karyawanForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addKaryawan();
+        });
+
+        function loadKaryawanData() {
+            const karyawanData = JSON.parse(localStorage.getItem('karyawanData')) || [];
+            const tableBody = document.getElementById('karyawanTableBody');
+            tableBody.innerHTML = '';
+            karyawanData.forEach((karyawan, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${karyawan.kode}</td>
+                    <td>${karyawan.nama}</td>
+                    <td>${karyawan.email}</td>
+                    <td>${karyawan.alamat}</td>
+                    <td>${karyawan.jabatan}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteKaryawan(${index})">Hapus</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addKaryawan() {
+            const kode = document.getElementById('kode').value;
+            const nama = document.getElementById('nama').value;
+            const email = document.getElementById('email').value;
+            const alamat = document.getElementById('alamat').value;
+            const jabatan = document.getElementById('jabatan').value;
+
+            const karyawanData = JSON.parse(localStorage.getItem('karyawanData')) || [];
+            karyawanData.push({ kode, nama, email, alamat, jabatan });
+            localStorage.setItem('karyawanData', JSON.stringify(karyawanData));
+            loadKaryawanData();
+            document.getElementById('karyawanForm').reset();
+        }
+
+        function deleteKaryawan(index) {
+            const karyawanData = JSON.parse(localStorage.getItem('karyawanData'));
+            karyawanData.splice(index, 1);
+            localStorage.setItem('karyawanData', JSON.stringify(karyawanData));
+            loadKaryawanData();
+        }
+    </script>
+</body>
+</html>

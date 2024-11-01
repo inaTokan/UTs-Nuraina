@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Data Jabatan</title>
+    <link href="stylesjabatan.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+        
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Data Jabatan</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="jabatanForm">
+                    <div class="form-group">
+                        <label for="kode">Kode Jabatan</label>
+                        <input type="text" class="form-control" id="kode" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="jabatan">Jabatan</label>
+                        <input type="text" class="form-control" id="jabatan" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tambah Jabatan</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Jabatan</th>
+                            <th>Jabatan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jabatanTableBody">
+                        <!-- Data akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadJabatanData);
+
+        document.getElementById('jabatanForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addJabatan();
+        });
+
+        function loadJabatanData() {
+            const jabatanData = JSON.parse(localStorage.getItem('jabatanData')) || [];
+            const tableBody = document.getElementById('jabatanTableBody');
+            tableBody.innerHTML = '';
+            jabatanData.forEach((jabatan, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${jabatan.kode}</td>
+                    <td>${jabatan.jabatan}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteJabatan(${index})">Hapus</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addJabatan() {
+            const kode = document.getElementById('kode').value;
+            const jabatan = document.getElementById('jabatan').value;
+
+            const jabatanData = JSON.parse(localStorage.getItem('jabatanData')) || [];
+            jabatanData.push({ kode, jabatan });
+            localStorage.setItem('jabatanData', JSON.stringify(jabatanData));
+            loadJabatanData();
+            document.getElementById('jabatanForm').reset();
+        }
+
+        function deleteJabatan(index) {
+            const jabatanData = JSON.parse(localStorage.getItem('jabatanData'));
+            jabatanData.splice(index, 1);
+            localStorage.setItem('jabatanData', JSON.stringify(jabatanData));
+            loadJabatanData();
+        }
+    </script>
+</body>
+</html>

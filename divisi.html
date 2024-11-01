@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Data Divisi</title>
+    <link href="stylesdivisi.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+    
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Data Divisi</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="divisiForm">
+                    <div class="form-group">
+                        <label for="kodeDivisi">Kode Divisi</label>
+                        <input type="text" class="form-control" id="kodeDivisi" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="namaDivisi">Nama Divisi</label>
+                        <input type="text" class="form-control" id="namaDivisi" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tambah Divisi</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Divisi</th>
+                            <th>Nama Divisi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="divisiTableBody">
+                        <!-- Data akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadDivisiData);
+
+        document.getElementById('divisiForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addDivisi();
+        });
+
+        function loadDivisiData() {
+            const divisiData = JSON.parse(localStorage.getItem('divisiData')) || [];
+            const tableBody = document.getElementById('divisiTableBody');
+            tableBody.innerHTML = '';
+            divisiData.forEach((divisi, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${divisi.kode}</td>
+                    <td>${divisi.nama}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteDivisi(${index})">Hapus</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addDivisi() {
+            const kodeDivisi = document.getElementById('kodeDivisi').value;
+            const namaDivisi = document.getElementById('namaDivisi').value;
+
+            const divisiData = JSON.parse(localStorage.getItem('divisiData')) || [];
+            divisiData.push({ kode: kodeDivisi, nama: namaDivisi });
+            localStorage.setItem('divisiData', JSON.stringify(divisiData));
+            loadDivisiData();
+            document.getElementById('divisiForm').reset();
+        }
+
+        function deleteDivisi(index) {
+            const divisiData = JSON.parse(localStorage.getItem('divisiData'));
+            divisiData.splice(index, 1);
+            localStorage.setItem('divisiData', JSON.stringify(divisiData));
+            loadDivisiData();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Data Lembur</title>
+    <link href="styleslembur.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"></a>
+            
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Data Lembur</h1>
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="lemburForm">
+                    <div class="form-group">
+                        <label for="nama">Nama Karyawan</label>
+                        <input type="text" class="form-control" id="nama" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" class="form-control" id="tanggal" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="jamMulai">Jam Lembur Mulai</label>
+                        <input type="time" class="form-control" id="jamMulai" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="jamBerakhir">Jam Lembur Berakhir</label>
+                        <input type="time" class="form-control" id="jamBerakhir" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="keperluan">Keperluan Lembur</label>
+                        <textarea class="form-control" id="keperluan" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Tambah Lembur</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Tanggal</th>
+                            <th>Jam Lembur (Mulai)</th>
+                            <th>Jam Lembur (Berakhir)</th>
+                            <th>Keperluan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lemburTableBody">
+                        <!-- Data akan ditambahkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', loadLemburData);
+
+        document.getElementById('lemburForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addLembur();
+        });
+
+        function loadLemburData() {
+            const lemburData = JSON.parse(localStorage.getItem('lemburData')) || [];
+            const tableBody = document.getElementById('lemburTableBody');
+            tableBody.innerHTML = '';
+            lemburData.forEach((lembur, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${lembur.nama}</td>
+                    <td>${lembur.tanggal}</td>
+                    <td>${lembur.jamMulai}</td>
+                    <td>${lembur.jamBerakhir}</td>
+                    <td>${lembur.keperluan}</td>
+                    <td>${lembur.status || 'Pending'}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="deleteLembur(${index})">Hapus</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function addLembur() {
+            const nama = document.getElementById('nama').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const jamMulai = document.getElementById('jamMulai').value;
+            const jamBerakhir = document.getElementById('jamBerakhir').value;
+            const keperluan = document.getElementById('keperluan').value;
+
+            const lemburData = JSON.parse(localStorage.getItem('lemburData')) || [];
+            lemburData.push({ nama: nama, tanggal: tanggal, jamMulai: jamMulai, jamBerakhir: jamBerakhir, keperluan: keperluan, status: 'Pending' });
+            localStorage.setItem('lemburData', JSON.stringify(lemburData));
+            loadLemburData();
+            document.getElementById('lemburForm').reset();
+        }
+
+        function deleteLembur(index) {
+            const lemburData = JSON.parse(localStorage.getItem('lemburData'));
+            lemburData.splice(index, 1);
+            localStorage.setItem('lemburData', JSON.stringify(lemburData));
+            loadLemburData();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <link rel="stylesheet" href="styleslogout.css">
+</head>
+<body>
+    <div class="logout-container">
+        <h2>Informasi Pengguna</h2>
+        <form id="logoutForm">
+            <div class="form-group">
+                <label for="namaLengkap">Nama Lengkap</label>
+                <input type="text" class="form-control" id="namaLengkap" required />
+            </div>
+            <div class="form-group">
+                <label for="jenisKelamin">Jenis Kelamin</label>
+                <select class="form-control" id="jenisKelamin" required>
+                    <option value="Pria">Pria</option>
+                    <option value="Wanita">Wanita</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" required />
+            </div>
+            <div class="form-group">
+                <label for="noHp">No HP</label>
+                <input type="tel" class="form-control" id="noHp" required />
+            </div>
+            <div class="form-group">
+                <label for="alamat">Alamat</label>
+                <textarea class="form-control" id="alamat" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" required />
+            </div>
+            <div class="form-group">
+                <label for="jabatan">Jabatan</label>
+                <input type="text" class="form-control" id="jabatan" required />
+            </div>
+            <div class="form-group">
+                <label for="divisi">Divisi</label>
+                <input type="text" class="form-control" id="divisi" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('logoutForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert("Anda telah berhasil logout!");
+            // Logika untuk menghapus session atau token login dapat ditambahkan di sini
+            window.location.href = "login.html"; // Arahkan kembali ke halaman login setelah logout
+        });
+    </script>
+</body>
+</html>
